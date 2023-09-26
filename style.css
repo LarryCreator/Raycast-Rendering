@@ -1,0 +1,46 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: black;
+    position: relative;
+    flex-direction: column;
+}
+
+canvas {
+    border: 3px blue solid;
+}
+
+#inputContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+#labelContainer {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+
+
+h1 {
+    color: white;
+    font-size: 22px;
+    margin: 0;
+}
+input {
+    margin: 0;
+    transform: translateY(-10px);
+    outline: none;
+}
+
+#resVal {
+    color: white;
+    font-size: 22px;
+    margin-left: 5px;
+}
