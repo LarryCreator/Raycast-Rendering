@@ -138,6 +138,20 @@ function drawCircle(position, radius, ctx) {
     ctx.stroke(); // Add a border
 }
   
+function keepWithinScreen(object) {
+    if (object.pos.x + object.radius >= canvas.width) {
+        object.pos.x = object.radius;
+    }
+    else if (object.pos.x - object.radius <= 0) {
+        object.pos.x = canvas.width - object.radius;
+    }
+    if (object.pos.y + object.radius > canvas.height) {
+        object.pos.y = object.radius;
+    }
+    else if (object.pos.y - object.radius < 0) {
+        object.pos.y = canvas.height - object.radius;
+    }
+}
 
 function generateWalls(quantity, list) {
     for (let i = 0; i < quantity; i++) {
@@ -183,6 +197,11 @@ canvas.loop(true, ()=>{
             ray.angle += particle.rotationSpeed;
         })
     }
+    if (particle.keysPressed.includes('s')) {
+        const dir = Vector2d.vecFrom(particle.angle);
+        dir.setMag(particle.speed);
+        particle.pos.sub(dir);
+    }
     if (particle.keysPressed.includes('ArrowRight')) {
         const facingDir = Vector2d.vecFrom(particle.angle);
         const dir = Vector2d.getPerpendicularDirection(facingDir);
@@ -201,6 +220,7 @@ canvas.loop(true, ()=>{
     })
     particle.render(canvas.ctx);
     particle.check(walls, canvas.ctx);
+    keepWithinScreen(particle);
 
     
 })
@@ -213,6 +233,9 @@ document.addEventListener('keydown', (e)=>{
         particle.keysPressed.push(e.key)
     }
     if (e.key == "w" && !particle.keysPressed.includes(e.key)) {
+        particle.keysPressed.push(e.key)
+    }
+    if (e.key == "s" && !particle.keysPressed.includes(e.key)) {
         particle.keysPressed.push(e.key)
     }
     if (e.key == "ArrowLeft" && !particle.keysPressed.includes(e.key)) {
@@ -232,7 +255,7 @@ document.addEventListener('keyup', (e)=>{
 const canvas2 = new Canvas("canvas2", canvasWidth, canvasHeight, "black");
 const canvas2ctx = canvas2.ctx;
 const canvasSlices = particle.fov;
-const smoothingValue = 3;
+const smoothingValue = 3; // change it to 1 so that it looks pixelized
 function renderSlices3d(xPos, color, width, height) {
     canvas2ctx.save();
     canvas2ctx.translate(xPos, canvas2.middle.y);
